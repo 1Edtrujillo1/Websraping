@@ -1,12 +1,11 @@
 rm(list=ls())
 
 ###LOADING PACKAGES###
-library(rvest) #WEBSCRAPING
-library(tidyr) #CLEANING DATA
-library(dplyr) #MANIPULATING DATA
-library(stringr) #CLEANING DATA
-library(purrr) #ITERATIONS
-library(rebus) #REGULAR EXPRESIONS
+
+library(purrr)
+
+map(c("rvest", "tidyr", "dplyr", "stringr", "purrr", "rebus"), 
+    require, character.only = TRUE) 
 
 webscraping<-"D:/Eduardo Trujillo/Downloads/TESIS/PROGRAMA/TIENDAS/"
 
@@ -23,6 +22,8 @@ for(i in 1:length(WEBSCRAPING)){
   WEBSCRAPING[,i]<-toupper(WEBSCRAPING[,i])
 }
 
+write.csv(WEBSCRAPING, "D:/Eduardo Trujillo/Downloads/TESIS/PROGRAMA/DF.csv", row.names = F, na = "")
+
 ##############
 #html()==read_html()
 #html_nodes() exrtraer los nodos relevantes
@@ -30,17 +31,6 @@ for(i in 1:length(WEBSCRAPING)){
 
 
 
-write.csv(WEBSCRAPING, "D:/Eduardo Trujillo/Downloads/TESIS/PROGRAMA/DF.csv", row.names = F, na = "")
-
-
-library(data.table)
-WEBSCRAPING<-as.data.table(WEBSCRAPING)
-
-
-
-universo<-WEBSCRAPING[,.(NOME_UF=str_trim(str_replace_all(NOME_UF,"UF_",""))), by = TIPO_NIELSEN] %>% 
-            .[,.N, by = .(NOME_UF,TIPO_NIELSEN)] 
-setorder(universo,TIPO_NIELSEN,NOME_UF)
 
 
 
